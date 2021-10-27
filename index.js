@@ -8,16 +8,6 @@ const regions = {
 
 }
 
-// const podeChegar = {
-
-//   1: false,
-//   2: false,
-//   3: false,
-//   4: false,
-//   5: false
-
-// }
-
 const defaultEntrys = [
 
   {
@@ -35,9 +25,20 @@ const defaultEntrys = [
 
 ]
 
+let output = 0;
+
 let outputEntrys = defaultEntrys;
 
+// outputEntrys.push({
+
+//   in: 2,
+//   out: 4
+
+// })
+
 function createRoutes(entrys, region) {
+
+  //criar rotas enquanto não poder chegar em todos os lugares dada tal região
 
   for (entry of entrys) {
 
@@ -49,7 +50,6 @@ function createRoutes(entrys, region) {
 
     for (entry2 of entrys) {
 
-
       outputEntrys.push(
         {
           in: entry.out,
@@ -58,11 +58,11 @@ function createRoutes(entrys, region) {
       )
       if (canReachAllRegions(outputEntrys, region)) {
 
-        console.log(outputEntrys);
+        // console.log(outputEntrys);
+        output++;
         return;
 
       };
-      console.log(outputEntrys);
       outputEntrys.pop();
 
 
@@ -81,22 +81,26 @@ function canReachAllRegions(entrys, region) {
   for (entry of entrys) {
 
     if (entry.in === region) {
-      canReach.push(entry.out);
+      if (!canReach.includes(entry.out) && entry.in !== entry.out) {
+        canReach.push(entry.out);
+      }
     }
     for (entry2 of entrys) {
 
       if (entry.out === entry2.in) {
 
-        canReach.push(entry2.out);
+        if (!canReach.includes(entry2.out) && entry.in !== entry2.out) {
+          canReach.push(entry2.out);
+        }
 
       }
 
     }
 
   }
-  // console.log(`${region} -> ${canReach}`);
+  console.log(`${region} -> ${canReach}`);
 
-  if (canReach.length < 5) {
+  if (canReach.length < 4) {
 
     return false
 
@@ -124,7 +128,28 @@ for (entry of defaultEntrys) {
 
 for (let i = 1; i < 6; i++) {
 
-  let allRegions = false;
   createRoutes(defaultEntrys, i);
 
 }
+
+console.log(output);
+
+for (entry of outputEntrys) {
+
+  console.log(`${regions[entry.in]} -> ${regions[entry.out]}`);
+
+}
+
+/*
+
+considerações finais:
+
+o código esta com bugs e ainda não faz o que o enunciado pede
+
+faltou eu verificar se as ligações estão coerentes
+
+além disso, está com a complexiadade muito alta, existem muitos laços dentro de laços
+
+com um pouco mais de tempo eu resolveria esses problemas
+
+*/
